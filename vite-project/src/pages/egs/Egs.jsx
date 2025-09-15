@@ -5,11 +5,8 @@ import {
        Tabs,
        Tab,
        Card,
-       CardHeader,
-       CardContent,
        CardActions,
        TextField,
-       Select,
        MenuItem,
        Button,
        Typography,
@@ -28,6 +25,7 @@ import {
        FormControl,
        InputLabel,
 } from "@mui/material";
+import Select from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
@@ -40,10 +38,15 @@ import { useForm, Controller } from "react-hook-form";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import dayjs from "dayjs";
+import SectionOne from "../home/SectionOne/SectionOne";
+import SectionTwo from "../home/SectionTwo/SectionTwo";
 
 function Egs() {
-       const { control, handleSubmit, watch } = useForm({
+       const [tabValue, setTabValue] = useState(0);
+       const [rows, setRows] = useState([]);
+       const [open, setOpen] = useState(false);
+       const [stateCenterStream, setStateCenterStream] = useState(false)
+       const { control, handleSubmit, watch, reset } = useForm({
               defaultValues: {
                      title: "",
                      description: "",
@@ -57,13 +60,7 @@ function Egs() {
        const onSubmit = (data) => {
               console.log(data);
        };
-       const [tab, setTab] = useState(0);
-       const handleChangeTab = (event, newValue) => {
-              setTab(newValue);
-       };
 
-       const [rows, setRows] = useState([]);
-       const [open, setOpen] = useState(false);
        const [formData, setFormData] = useState({
               col1: "",
               col2: "",
@@ -88,54 +85,48 @@ function Egs() {
               setRows([...rows, formData]);
               handleClose();
        };
+       // Habere tıklandığında formu dolduracak fonksiyon
+       const handleSelectNews = (news) => {
+              reset({
+                     title: news.title,
+                     description: news.description,
+                     subtitleText: news.subtitleText || "",
+                     mainText: news.mainText || "",
+                     date: news.publishDate ? new Date(news.publishDate) : null,
+                     newsletter: news.newsletter || "",
+              });
+       };
+
+       const newNews = () => {
+              reset({
+                     title: "",
+                     description: "",
+                     subtitleText: "",
+                     mainText: "",
+                     date: null,
+                     newsletter: "",
+              });
+       }
+
+       const centerStream = () => {
+              setStateCenterStream(true);
+       }
 
 
        return (
-              <Grid container sx={{ height: "100vh", width: '100%' }}> {/* Tam ekran */}
+              <Grid container sx={{ height: "100vh", width: '100%' }}>
                      {/* Sol taraf */}
                      <Grid item size={3} sx={{ borderRight: "1px solid #ddd", height: "100%" }}>
-                            <Card sx={{ height: "100%", borderRadius: 0, display: "flex", flexDirection: "column" }}>
-                                   <Tabs
-                                          value={tab}
-                                          onChange={handleChangeTab}
-                                          variant="fullWidth"
-                                          sx={{ borderBottom: 1, borderColor: "divider", minHeight: 40 }}
-                                   >
-                                          <Tab label="Haberlerim" sx={{ minHeight: 40, fontSize: "0.8rem" }} />
-                                          <Tab label="Havuz" sx={{ minHeight: 40, fontSize: "0.8rem" }} />
-                                          <Tab label="Bülten" sx={{ minHeight: 40, fontSize: "0.8rem" }} />
-                                          <Tab label="Ajans" sx={{ minHeight: 40, fontSize: "0.8rem" }} />
-                                   </Tabs>
-
-                                   <Box sx={{ flexGrow: 1, overflow: "auto" }}>
-                                          {tab === 0 && (
-                                                 <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
-                                                        <Table size="small">
-                                                               <TableBody>
-                                                                      <TableRow>
-                                                                             <TableCell sx={{ width: 20 }}>☰</TableCell>
-                                                                             <TableCell>
-                                                                                    <Typography fontWeight="bold">
-                                                                                           41 yıllık Bayburt İmam Hatip Lisesi binası yıkıldı
-                                                                                    </Typography>
-                                                                                    <Typography variant="caption" color="text.secondary">
-                                                                                           00:00
-                                                                                    </Typography>
-                                                                             </TableCell>
-                                                                      </TableRow>
-                                                               </TableBody>
-                                                        </Table>
-                                                 </TableContainer>
-                                          )}
-                                          {tab === 1 && <Typography p={2} color="text.secondary">Havuz içerikleri buraya gelecek</Typography>}
-                                          {tab === 2 && <Typography p={2} color="text.secondary">Bülten içerikleri buraya gelecek</Typography>}
-                                          {tab === 3 && <Typography p={2} color="text.secondary">Ajans içerikleri buraya gelecek</Typography>}
-                                   </Box>
-                            </Card>
+                            <SectionOne tabValue={tabValue} setTabValue={setTabValue} newsItems={newsItems} handleSelectNews={handleSelectNews} />
                      </Grid>
+                     {stateCenterStream &&
+                            <Grid item size={2}>
+                                   <SectionTwo newsItems={newsItems} setStateCenterStream={setStateCenterStream} />
+                            </Grid>
+                     }
 
                      {/* Sağ taraf */}
-                     <Grid item size={9} sx={{ height: "100%" }}>
+                     <Grid item size={stateCenterStream === true ? 7 : 9} sx={{ height: "100%" }}>
                             <Box
                                    sx={{
                                           height: 60,
@@ -146,7 +137,7 @@ function Egs() {
                                           boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
                                    }}
                             >
-                                   <Stack direction="row" spacing={0.5}  sx={{ width: "100%" }}>
+                                   <Stack direction="row" spacing={0.5} sx={{ width: "100%" }}>
                                           <Button
                                                  startIcon={<AddIcon />}
                                                  sx={{
@@ -156,13 +147,13 @@ function Egs() {
                                                         fontWeight: 400,
                                                         textTransform: "none",
                                                         borderRadius: 1,
-                                                        padding:0.5,
+                                                        padding: 0.5,
                                                         "&:hover": {
                                                                bgcolor: "#43a047",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
+                                                 onClick={newNews}
                                           >
                                                  Yeni Haber
                                           </Button>
@@ -176,13 +167,13 @@ function Egs() {
                                                         fontWeight: 400,
                                                         textTransform: "none",
                                                         borderRadius: 1,
-                                                        padding:0.5,
+                                                        padding: 0.5,
                                                         "&:hover": {
                                                                bgcolor: "#ffa000",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
+                                                 onClick={centerStream}
                                           >
                                                  Merkez Akış
                                           </Button>
@@ -196,12 +187,11 @@ function Egs() {
                                                         fontWeight: 400,
                                                         textTransform: "none",
                                                         borderRadius: 1,
-                                                        padding:0.5,
+                                                        padding: 0.5,
                                                         "&:hover": {
                                                                bgcolor: "#d32f2f",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
                                           >
                                                  Bülten
@@ -216,12 +206,11 @@ function Egs() {
                                                         fontWeight: 400,
                                                         textTransform: "none",
                                                         borderRadius: 1,
-                                                        padding:0.5,
+                                                        padding: 0.5,
                                                         "&:hover": {
                                                                bgcolor: "#f57c00",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
                                           >
                                                  Versiyon Oluştur
@@ -238,12 +227,11 @@ function Egs() {
                                                         fontWeight: 400,
                                                         textTransform: "none",
                                                         borderRadius: 1,
-                                                        padding:0.5,
+                                                        padding: 0.5,
                                                         "&:hover": {
                                                                bgcolor: "#1565c0",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
                                           >
                                                  Kaydet
@@ -254,14 +242,13 @@ function Egs() {
                                    <form id="egsForm" onSubmit={handleSubmit(onSubmit)}>
                                           {/* Üst Form Alanı */}
                                           <Grid container spacing={1} sx={{ p: 1 }}>
-
                                                  {/* Başlık */}
                                                  <Grid size={3}>
                                                         <Controller
                                                                name="title"
                                                                control={control}
                                                                render={({ field }) => (
-                                                                      <TextField {...field} label="Başlık" variant="outlined" fullWidth />
+                                                                      <TextField {...field} label="Başlık" size="small" variant="outlined" fullWidth />
                                                                )}
                                                         />
                                                  </Grid>
@@ -272,7 +259,7 @@ function Egs() {
                                                                name="description"
                                                                control={control}
                                                                render={({ field }) => (
-                                                                      <TextField {...field} label="Açıklama" variant="outlined" fullWidth />
+                                                                      <TextField {...field} label="Açıklama" size="small" variant="outlined" fullWidth />
                                                                )}
                                                         />
                                                  </Grid>
@@ -304,22 +291,19 @@ function Egs() {
                                                                control={control}
                                                                placeholder="Bülten Seçin"
                                                                render={({ field }) => (
-                                                                      <FormControl size="small" fullWidth>
-                                                                             <InputLabel>Bülten</InputLabel>
+                                                                      <FormControl fullWidth size="small">
+                                                                             <InputLabel id="newsletter-label">Bülten</InputLabel>
                                                                              <Select
                                                                                     {...field}
                                                                                     labelId="newsletter-label"
                                                                                     id="newsletter"
                                                                                     value={field.value || ""}
-                                                                                    label="Bülten"
+                                                                                    label="Bülten Seçin"
                                                                                     sx={{
                                                                                            "& .MuiSelect-select": {
                                                                                                   display: "flex",
                                                                                                   alignItems: "center",
-                                                                                                  height: "100%",
-                                                                                                  paddingY: "12px",
                                                                                            },
-                                                                                           height: "54px",
                                                                                     }}
                                                                              >
                                                                                     <MenuItem value="">
@@ -481,3 +465,33 @@ function Egs() {
 }
 
 export default Egs;
+
+export const newsItems = [
+       {
+              pk_NewsId: 0,
+              title: "Kayserispor 3. beraberliğini aldı",
+              description: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              subtitleText: "Kayserispor 3. beraberliğini aldı",
+              mainText: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              city: "Kayseri",
+              publishDate: "2025-09-15T11:34:34"
+       },
+       {
+              pk_NewsId: 1,
+              title: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              description: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              subtitleText: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              mainText: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              city: "Antalya",
+              publishDate: "2025-09-15T11:33:23"
+       },
+       {
+              pk_NewsId: 2,
+              title: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              description: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              subtitleText: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              mainText: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              city: "Denizli",
+              publishDate: "2025-09-15T11:33:07"
+       }
+];

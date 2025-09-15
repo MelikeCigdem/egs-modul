@@ -133,11 +133,14 @@
 }
 
 .datePicker {
+       width: 100%;
        input {
-              width: 380px;
+              width: 92%;
+              min-width: 180px;
+              height: 1px;
               padding: 18px 14px;
               border: 1px solid #ccc;
-              border-radius: 8px;
+              border-radius: 4px;
               font-size: 1rem;
               transition: border-color 0.3s, box-shadow 0.3s;
               // margin-bottom: 20px;
@@ -155,7 +158,7 @@
               }
        }
        button {
-              height: 72%;
+              height: 90%;
        }
 
        @media (max-width: 768px) {

@@ -14,6 +14,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 ## Teknolojiler
 
--react-hook-form
--context-api
--react-redux
+- react-hook-form
+- context-api
+- react-redux
+- dnd-kit/core
