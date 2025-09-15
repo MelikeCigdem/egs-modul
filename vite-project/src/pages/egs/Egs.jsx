@@ -14,6 +14,10 @@ import {
        Button,
        Typography,
        Table,
+       Dialog,
+       DialogActions,
+       DialogContent,
+       DialogTitle,
        TableHead,
        TableBody,
        TableRow,
@@ -33,6 +37,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from './Egs.module.scss';
 import { useForm, Controller } from "react-hook-form";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import dayjs from "dayjs";
 
 function Egs() {
        const { control, handleSubmit, watch } = useForm({
@@ -53,9 +61,34 @@ function Egs() {
        const handleChangeTab = (event, newValue) => {
               setTab(newValue);
        };
-       const addKjRow = () => {
-              console.log("Satır eklendi");
+
+       const [rows, setRows] = useState([]);
+       const [open, setOpen] = useState(false);
+       const [formData, setFormData] = useState({
+              col1: "",
+              col2: "",
+              desc: "",
+              info: null,
+       });
+
+       const handleOpen = () => setOpen(true);
+       const handleClose = () => {
+              setOpen(false);
+              setFormData({ col1: "", col2: "", desc: "", info: null });
        };
+
+       const handleChange = (e) => {
+              setFormData({
+                     ...formData,
+                     [e.target.name]: e.target.value,
+              });
+       };
+
+       const handleAddRow = () => {
+              setRows([...rows, formData]);
+              handleClose();
+       };
+
 
        return (
               <Grid container sx={{ height: "100vh", width: '100%' }}> {/* Tam ekran */}
@@ -106,28 +139,29 @@ function Egs() {
                             <Box
                                    sx={{
                                           height: 60,
-                                          px: 2,
+                                          px: 1,
                                           display: "flex",
                                           alignItems: "center",
                                           bgcolor: "#fff",
                                           boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
                                    }}
                             >
-                                   <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
+                                   <Stack direction="row" spacing={0.5}  sx={{ width: "100%" }}>
                                           <Button
                                                  startIcon={<AddIcon />}
                                                  sx={{
-                                                        pb: 'unset',
                                                         flex: 1,
                                                         bgcolor: "#4caf50",
                                                         color: "#fff",
-                                                        fontWeight: 600,
+                                                        fontWeight: 400,
                                                         textTransform: "none",
+                                                        borderRadius: 1,
+                                                        padding:0.5,
                                                         "&:hover": {
                                                                bgcolor: "#43a047",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
                                           >
                                                  Yeni Haber
@@ -139,13 +173,15 @@ function Egs() {
                                                         flex: 1,
                                                         bgcolor: "#ffb300",
                                                         color: "#fff",
-                                                        fontWeight: 600,
+                                                        fontWeight: 400,
                                                         textTransform: "none",
+                                                        borderRadius: 1,
+                                                        padding:0.5,
                                                         "&:hover": {
                                                                bgcolor: "#ffa000",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
                                           >
                                                  Merkez Akış
@@ -157,13 +193,15 @@ function Egs() {
                                                         flex: 1,
                                                         bgcolor: "#e53935",
                                                         color: "#fff",
-                                                        fontWeight: 600,
+                                                        fontWeight: 400,
                                                         textTransform: "none",
+                                                        borderRadius: 1,
+                                                        padding:0.5,
                                                         "&:hover": {
                                                                bgcolor: "#d32f2f",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
                                           >
                                                  Bülten
@@ -175,13 +213,15 @@ function Egs() {
                                                         flex: 1,
                                                         bgcolor: "#fb8c00",
                                                         color: "#fff",
-                                                        fontWeight: 600,
+                                                        fontWeight: 400,
                                                         textTransform: "none",
+                                                        borderRadius: 1,
+                                                        padding:0.5,
                                                         "&:hover": {
                                                                bgcolor: "#f57c00",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
                                           >
                                                  Versiyon Oluştur
@@ -195,13 +235,15 @@ function Egs() {
                                                         flex: 1,
                                                         bgcolor: "#1976d2",
                                                         color: "#fff",
-                                                        fontWeight: 600,
+                                                        fontWeight: 400,
                                                         textTransform: "none",
+                                                        borderRadius: 1,
+                                                        padding:0.5,
                                                         "&:hover": {
                                                                bgcolor: "#1565c0",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
                                                         },
-                                                        boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+                                                        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
                                                  }}
                                           >
                                                  Kaydet
@@ -212,8 +254,9 @@ function Egs() {
                                    <form id="egsForm" onSubmit={handleSubmit(onSubmit)}>
                                           {/* Üst Form Alanı */}
                                           <Grid container spacing={1} sx={{ p: 1 }}>
+
                                                  {/* Başlık */}
-                                                 <Grid item size={3}>
+                                                 <Grid size={3}>
                                                         <Controller
                                                                name="title"
                                                                control={control}
@@ -224,7 +267,7 @@ function Egs() {
                                                  </Grid>
 
                                                  {/* Açıklama */}
-                                                 <Grid item size={3}>
+                                                 <Grid size={3}>
                                                         <Controller
                                                                name="description"
                                                                control={control}
@@ -235,7 +278,7 @@ function Egs() {
                                                  </Grid>
 
                                                  {/* Tarih */}
-                                                 <Grid item size={3}>
+                                                 <Grid size={3}>
                                                         <Controller
                                                                name="date"
                                                                control={control}
@@ -255,7 +298,7 @@ function Egs() {
                                                  </Grid>
 
                                                  {/* Bülten */}
-                                                 <Grid item size={3}>
+                                                 <Grid size={3}>
                                                         <Controller
                                                                name="newsletter"
                                                                control={control}
@@ -304,14 +347,14 @@ function Egs() {
                                                                       variant="outlined"
                                                                       fullWidth
                                                                       multiline
-                                                                      rows={3}
+                                                                      rows={6}
                                                                />
                                                         )}
                                                  />
                                           </Box>
 
                                           {/* Ana Metin */}
-                                          <CardContent sx={{ flexGrow: 1, p: 1, overflow: "auto" }}>
+                                          <Box sx={{ flexGrow: 1, p: 1, overflow: "auto" }}>
                                                  <Controller
                                                         name="mainText"
                                                         control={control}
@@ -322,17 +365,17 @@ function Egs() {
                                                                       variant="outlined"
                                                                       fullWidth
                                                                       multiline
-                                                                      rows={3}
+                                                                      rows={14}
                                                                />
                                                         )}
                                                  />
-                                          </CardContent>
+                                          </Box>
                                    </form>
 
                                    <CardActions sx={{ borderTop: "1px solid #ddd", flexDirection: "column", flexGrow: 1, overflow: "hidden" }}>
                                           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", p: 1, bgcolor: "grey.100", borderBottom: "1px solid #ddd" }}>
-                                                 <Typography variant="subtitle2">Altyazı Tablosu</Typography>
-                                                 <Button variant="contained" size="small" onClick={addKjRow}>
+                                                 <Typography sx={{ pl: "6px" }} variant="body2" fontWeight="bold">Altyazı Tablosu</Typography>
+                                                 <Button variant="contained" size="small" onClick={handleOpen}>
                                                         + Satır Ekle
                                                  </Button>
                                           </Box>
@@ -341,15 +384,94 @@ function Egs() {
                                                  <Table size="small">
                                                         <TableHead>
                                                                <TableRow>
-                                                                      <TableCell width="25%">1. Satır</TableCell>
-                                                                      <TableCell width="25%">2. Satır</TableCell>
-                                                                      <TableCell width="30%">Açıklama</TableCell>
-                                                                      <TableCell width="20%">Süre/Bilgi</TableCell>
+                                                                      <TableCell width="25%">
+                                                                             <Typography variant="body2" fontWeight="bold">
+                                                                                    KJ 1. satır
+                                                                             </Typography>
+                                                                      </TableCell>
+                                                                      <TableCell width="25%">
+                                                                             <Typography variant="body2" fontWeight="bold">
+                                                                                    KJ 2. satır
+                                                                             </Typography>
+                                                                      </TableCell>
+                                                                      <TableCell width="30%"><Typography variant="body2" fontWeight="bold">
+                                                                             Açıklama
+                                                                      </Typography></TableCell>
+                                                                      <TableCell width="20%"><Typography variant="body2" fontWeight="bold">
+                                                                             Süre/Bilgi
+                                                                      </Typography></TableCell>
                                                                </TableRow>
                                                         </TableHead>
-                                                        <TableBody>{/* Dinamik satırlar buraya map ile gelecek */}</TableBody>
+                                                        <TableBody>
+                                                               {rows.map((row, index) => (
+                                                                      <TableRow key={index}>
+                                                                             <TableCell>{row.col1}</TableCell>
+                                                                             <TableCell>{row.col2}</TableCell>
+                                                                             <TableCell>{row.desc}</TableCell>
+                                                                             <TableCell>{row.info ? row.info.format("HH:mm") : ""}</TableCell>
+                                                                      </TableRow>
+                                                               ))}
+                                                        </TableBody>
                                                  </Table>
                                           </Box>
+                                          <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+                                                 <DialogTitle sx={{ fontWeight: 600, pb: 1 }}>
+                                                        Yeni Satır Ekle
+                                                 </DialogTitle>
+
+                                                 <DialogContent dividers sx={{ p: 3 }}>
+                                                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                                               <TextField
+                                                                      label="KJ 1. satır"
+                                                                      name="col1"
+                                                                      value={formData.col1}
+                                                                      onChange={handleChange}
+                                                                      fullWidth
+                                                               />
+
+                                                               <TextField
+                                                                      label="KJ 2. satır"
+                                                                      name="col2"
+                                                                      value={formData.col2}
+                                                                      onChange={handleChange}
+                                                                      fullWidth
+                                                               />
+
+                                                               <TextField
+                                                                      label="Açıklama"
+                                                                      name="desc"
+                                                                      value={formData.desc}
+                                                                      onChange={handleChange}
+                                                                      fullWidth
+                                                                      multiline
+                                                                      rows={3}
+                                                               />
+
+                                                               <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                      <TimePicker
+                                                                             label="Süre"
+                                                                             value={formData.info}
+                                                                             onChange={(newValue) =>
+                                                                                    setFormData((prev) => ({ ...prev, info: newValue }))
+                                                                             }
+                                                                             slotProps={{
+                                                                                    textField: { fullWidth: true },
+                                                                             }}
+                                                                      />
+                                                               </LocalizationProvider>
+                                                        </Box>
+                                                 </DialogContent>
+
+                                                 <DialogActions sx={{ px: 3, pb: 2 }}>
+                                                        <Button onClick={handleClose} color="inherit">
+                                                               İptal
+                                                        </Button>
+                                                        <Button onClick={handleAddRow} variant="contained">
+                                                               Kaydet
+                                                        </Button>
+                                                 </DialogActions>
+                                          </Dialog>
+
                                    </CardActions>
                             </Card>
                      </Grid>
