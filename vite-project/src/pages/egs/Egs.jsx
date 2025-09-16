@@ -112,7 +112,6 @@ function Egs() {
               setStateCenterStream(true);
        }
 
-
        return (
               <Grid container sx={{ height: "100vh", width: '100%' }}>
                      {/* Sol taraf */}
@@ -331,7 +330,7 @@ function Egs() {
                                                                       variant="outlined"
                                                                       fullWidth
                                                                       multiline
-                                                                      rows={6}
+                                                                      rows={9}
                                                                />
                                                         )}
                                                  />
@@ -349,7 +348,7 @@ function Egs() {
                                                                       variant="outlined"
                                                                       fullWidth
                                                                       multiline
-                                                                      rows={14}
+                                                                      rows={16}
                                                                />
                                                         )}
                                                  />

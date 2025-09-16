@@ -21,6 +21,7 @@ import {
        Paper,
        TableContainer,
 } from "@mui/material";
+import DraggableItem from '../../../components/DndKit/DraggableItem';
 
 
 function CustomTabPanel({ children, value, index }) {
@@ -51,7 +52,7 @@ const tabIcons = [
 
 
 
-export default function SectionOne({ tabValue, setTabValue,newsItems, handleSelectNews}) {
+export default function SectionOne({ tabValue, setTabValue, newsItems, handleSelectNews }) {
 
        const handleChange = (event, newValue) => {
               setTabValue(newValue)
@@ -108,22 +109,48 @@ export default function SectionOne({ tabValue, setTabValue,newsItems, handleSele
                                    <Table size="small">
                                           <TableBody>
                                                  {newsItems.map((item) => (
-                                                        <TableRow key={item.pk_NewsId} onClick={() => handleSelectNews(item)} sx={{ cursor: "pointer" }}>
+                                                        <DraggableItem key={item.pk_NewsId} item={item} onClick={() => handleSelectNews(item)}>
                                                                <TableCell>
                                                                       <Typography fontSize={14} fontWeight="bold">{item.title}</Typography>
                                                                       <Typography variant="caption" color="text.secondary">
                                                                              {new Date(item.publishDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {item.city}
                                                                       </Typography>
                                                                </TableCell>
-                                                        </TableRow>
+
+                                                               {/* Drag handle sadece buraya */}
+                                                               <TableCell align="right" width={50}>
+                                                                      <span className="drag-handle" style={{ cursor: "grab" }}>☰</span>
+                                                               </TableCell>
+                                                        </DraggableItem>
                                                  ))}
                                           </TableBody>
+
                                    </Table>
                             </TableContainer>
                      </CustomTabPanel>
                      <CustomTabPanel value={tabValue} index={1}>
-                            {/* <OnAirNews setTabValue={setTabValue} /> */}
-                            <div>Havuz</div>
+                            <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
+                                   <Table size="small">
+                                          <TableBody>
+                                                 {newsItems.map((item) => (
+                                                        <DraggableItem key={item.pk_NewsId} item={item} onClick={() => handleSelectNews(item)}>
+                                                               <TableCell>
+                                                                      <Typography fontSize={14} fontWeight="bold">{item.title}</Typography>
+                                                                      <Typography variant="caption" color="text.secondary">
+                                                                             {new Date(item.publishDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {item.city}
+                                                                      </Typography>
+                                                               </TableCell>
+
+                                                               {/* Drag handle sadece buraya */}
+                                                               <TableCell align="right" width={50}>
+                                                                      <span className="drag-handle" style={{ cursor: "grab" }}>☰</span>
+                                                               </TableCell>
+                                                        </DraggableItem>
+                                                 ))}
+                                          </TableBody>
+
+                                   </Table>
+                            </TableContainer>
                      </CustomTabPanel>
                      <CustomTabPanel value={tabValue} index={2}>
                             {/* <MyNews setTabValue={setTabValue} /> */}

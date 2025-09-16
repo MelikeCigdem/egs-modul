@@ -4,16 +4,13 @@ import PropTypes from 'prop-types';
 import {
        Box,
        Typography,
-       Table,
-       TableBody,
-       TableRow,
-       TableCell,
        Paper,
        TableContainer,
        IconButton,
        Grid,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import DropZone from '../../../components/DndKit/DndKit';
 
 
 function CustomTabPanel({ children, value, index }) {
@@ -71,20 +68,12 @@ export default function SectionTwo({ newsItems, setStateCenterStream }) {
 
 
                      <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
-                            <Table size="small">
-                                   <TableBody>
-                                          {newsItems.map((item) => (
-                                                 <TableRow key={item.pk_NewsId} sx={{ cursor: "pointer" }}>
-                                                        <TableCell>
-                                                               <Typography fontSize={14} fontWeight="bold">{item.title}</Typography>
-                                                               <Typography variant="caption" color="text.secondary">
-                                                                      {new Date(item.publishDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {item.city}
-                                                               </Typography>
-                                                        </TableCell>
-                                                 </TableRow>
-                                          ))}
-                                   </TableBody>
-                            </Table>
+                            <DropZone id="detay"
+                                   newsItems={newsItems}
+                                   title={"Detay fotoğrafını sürükle bırak"}
+                                   fieldName="image2Source"
+                            />
+
                      </TableContainer>
               </Box>
        );
