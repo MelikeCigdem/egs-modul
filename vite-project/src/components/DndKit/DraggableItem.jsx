@@ -1,8 +1,6 @@
 // DraggableItem.js
 import { useDraggable } from "@dnd-kit/core";
 import { TableCell, TableRow, Typography } from "@mui/material";
-import { useState } from "react";
-
 
 export default function DraggableItem({ item, children, onClick }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useDraggable({
@@ -18,12 +16,9 @@ export default function DraggableItem({ item, children, onClick }) {
     transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
     transition,
     opacity: isDragging ? 0.6 : 1,
+    cursor: "pointer"
   };
-  const [dragging, setDragging] = useState(false);
 
-  const handleClick = () => {
-    if (!dragging && onClick) onClick(item);
-  };
 
   return (
     <TableRow ref={setNodeRef} sx={style} onClick={() => onClick?.(item)}>
@@ -39,7 +34,7 @@ export default function DraggableItem({ item, children, onClick }) {
         <span
           className="drag-handle"
           style={{ cursor: "grab" }}
-          {...listeners}  // sadece handle’a ekle
+          {...listeners}
         >
           ☰
         </span>

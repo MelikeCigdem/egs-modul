@@ -1,4 +1,4 @@
-import { cloneElement, useEffect, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
        Box,
@@ -24,10 +24,7 @@ import {
 } from "@mui/material";
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
 
 import DraggableItem from '../../../components/DndKit/DraggableItem';
 

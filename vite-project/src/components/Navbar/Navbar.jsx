@@ -9,16 +9,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Logo from "../../assets/turkmedya_logo.png";
-import FilterWeb from './FilterWeb';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import styles from './Navbar.module.scss';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
-
-
 
 export default function PrimarySearchAppBar() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -28,8 +24,6 @@ export default function PrimarySearchAppBar() {
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     const currentColor = '#3c3c3c';
-    // filter
-    const [simpleOpen, setSimpleOpen] = useState(false);
 
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
@@ -215,7 +209,6 @@ export default function PrimarySearchAppBar() {
                     </Box>
                 </Toolbar>
             </AppBar>
-            <FilterWeb open={simpleOpen} onClose={() => setSimpleOpen(false)} />
             {renderMobileMenu}
             {renderMenu}
         </Box>
