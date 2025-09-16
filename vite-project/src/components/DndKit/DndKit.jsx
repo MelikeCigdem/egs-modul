@@ -2,14 +2,20 @@ import { useDroppable } from '@dnd-kit/core';
 import { Box, Typography, Table, TableBody, TableCell, TableRow, IconButton } from '@mui/material';
 import { useDndKit } from "../../context/DndProvider";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function DropZone({ id }) {
+export default function DropZone({ id, onChange }) {
   const { isOver, setNodeRef } = useDroppable({ id });
   const { dropped, setDropped } = useDndKit();
 
   const zoneItems = dropped[id] ?? [];
   const [hoveredId, setHoveredId] = useState(null);
+
+  useEffect(() => {
+    if (typeof onChange === "function") {
+      onChange(zoneItems);
+    }
+  }, [JSON.stringify(zoneItems)]);
 
   const removeItem = (itemId) => {
     setDropped((prev) => ({
@@ -28,7 +34,7 @@ export default function DropZone({ id }) {
               onMouseEnter={() => setHoveredId(item.pk_NewsId)}
               onMouseLeave={() => setHoveredId(null)}
             >
-              <TableCell>
+              <TableCell sx={{p:1}}>
                 <Typography fontSize={14} fontWeight="bold">{item.title}</Typography>
                 <Typography variant="caption" color="text.secondary">
                   {new Date(item.publishDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {item.city}

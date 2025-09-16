@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { cloneElement, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
        Box,
        Tabs,
        Tab,
        Tooltip,
+       Card,
+       CardContent,
 } from '@mui/material';
 import {
        ExitToApp as ExitToAppIcon,
@@ -16,11 +18,17 @@ import {
        Typography,
        Table,
        TableBody,
-       TableRow,
        TableCell,
        Paper,
        TableContainer,
 } from "@mui/material";
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/Inbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+
 import DraggableItem from '../../../components/DndKit/DraggableItem';
 
 
@@ -51,9 +59,10 @@ const tabIcons = [
 ];
 
 
+export default function SectionOne({ tabValue, setTabValue, newsItems, handleSelectNews, setStateCenterStream }) {
+       const [selectedIndex, setSelectedIndex] = useState(1);
 
-export default function SectionOne({ tabValue, setTabValue, newsItems, handleSelectNews }) {
-
+     
        const handleChange = (event, newValue) => {
               setTabValue(newValue)
        }
@@ -99,11 +108,21 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
               </Tabs>
        );
 
+       const handleListItemClick = (event, index, item) => {
+              console.log("index",index);
+              // aktif olan bülten satırını belirtmek için
+              setSelectedIndex(index);
+              // Merkez akış kolonunu açmak için 
+              setStateCenterStream(true)
+       };
+
+    
        return (
               <Box>
                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1, gap: 2 }}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>{renderTabs()}</Box>
                      </Box>
+                     {/* Haberlerim */}
                      <CustomTabPanel value={tabValue} index={0}>
                             <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
                                    <Table size="small">
@@ -128,6 +147,7 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
                                    </Table>
                             </TableContainer>
                      </CustomTabPanel>
+                     {/* Havuz */}
                      <CustomTabPanel value={tabValue} index={1}>
                             <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
                                    <Table size="small">
@@ -152,15 +172,50 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
                                    </Table>
                             </TableContainer>
                      </CustomTabPanel>
+                     {/* Bülten */}
                      <CustomTabPanel value={tabValue} index={2}>
-                            {/* <MyNews setTabValue={setTabValue} /> */}
-                            <div>Bülten</div>
-                     </CustomTabPanel>
-                     <CustomTabPanel value={tabValue} index={3}>
-                            {/* <SortingNews /> */}
-                            <div>Ajans</div>
+                            <Card sx={{ width: '100%', borderRadius: 0, boxShadow: 2, p: 0 }}>
+                                   <CardContent sx={{ p: 0 }}>
+                                          <List sx={{ p: 0 }}>
+                                                 {[{ time: "07:00" }, { time: "08:00" }, { time: "09:00" }].map((item, index) => (
+                                                        <ListItemButton
+                                                               key={index}
+                                                               selected={selectedIndex === index}
+                                                               onClick={(event) => handleListItemClick(event, index, item)}
+                                                               sx={{
+                                                                      borderRadius: "unset",
+                                                                      borderBottom: index !== 2 ? "1px solid #eee" : "none",
+                                                                      "&.Mui-selected": {
+                                                                             bgcolor: "#424242a3",
+                                                                             color: "primary.contrastText",
+                                                                             "& .MuiSvgIcon-root": {
+                                                                                    color: "primary.contrastText"
+                                                                             }
+                                                                      },
+                                                                      "&.Mui-selected:hover": {
+                                                                             bgcolor: "#424242a3"
+                                                                      },
+                                                                      "&:hover": {
+                                                                             bgcolor: "inherit"
+                                                                      }
+                                                               }}
+                                                        >
+                                                               <AccessAlarmSharpIcon sx={{ mr: 1 }} fontSize="small" color="warning" />
+                                                               <ListItemText
+                                                                      primary={item.time}
+                                                                      primaryTypographyProps={{ fontWeight: "bold", fontSize: "14px" }}
+                                                               />
+                                                        </ListItemButton>
+                                                 ))}
+                                          </List>
+                                   </CardContent>
+                            </Card>
                      </CustomTabPanel>
 
+                     {/* Ajans */}
+                     <CustomTabPanel value={tabValue} index={3}>
+                            <div>Ajans</div>
+                     </CustomTabPanel>
               </Box>
        );
 }

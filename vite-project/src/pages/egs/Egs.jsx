@@ -116,10 +116,10 @@ function Egs() {
               <Grid container sx={{ height: "100vh", width: '100%' }}>
                      {/* Sol taraf */}
                      <Grid item size={3} sx={{ borderRight: "1px solid #ddd", height: "100%" }}>
-                            <SectionOne tabValue={tabValue} setTabValue={setTabValue} newsItems={newsItems} handleSelectNews={handleSelectNews} />
+                            <SectionOne tabValue={tabValue} setTabValue={setTabValue} newsItems={newsItems} handleSelectNews={handleSelectNews} setStateCenterStream={setStateCenterStream}/>
                      </Grid>
                      {stateCenterStream &&
-                            <Grid item size={2}>
+                            <Grid item size={2} sx={{borderRadius:"unset"}}>
                                    <SectionTwo newsItems={newsItems} setStateCenterStream={setStateCenterStream} />
                             </Grid>
                      }
@@ -146,7 +146,7 @@ function Egs() {
                                                         fontWeight: 400,
                                                         textTransform: "none",
                                                         borderRadius: 1,
-                                                        padding: 0.5,
+                                                        padding: 1,
                                                         "&:hover": {
                                                                bgcolor: "#43a047",
                                                                boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
