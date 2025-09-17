@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -12,7 +12,9 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from '@mui/icons-material/Save';
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import DropZone from '../../../components/DndKit/DndKit';
+import { useDndKit } from '../../../context/DndProvider';
 
 
 function CustomTabPanel({ children, value, index }) {
@@ -34,12 +36,28 @@ CustomTabPanel.propTypes = {
        value: PropTypes.number.isRequired,
 };
 
-export default function SectionTwo({ newsItems, setStateCenterStream }) {
+export default function SectionTwo({ newsItems, setStateCenterStream, bulletinID }) {
+       const { setDropped } = useDndKit();
        const [droppedFiles, setDroppedFiles] = useState([]);
+       const [bulteinData, setBulteinData] = useState([]);
 
        const handleSave = async () => {
               console.log("Kaydedilecek veriler:", droppedFiles);
        };
+
+       useEffect(() => {
+              setBulteinData(newsItems.find(item => item.pk_NewsId === bulletinID))
+       }, [bulletinID])
+
+       useEffect(() => {
+              if (bulteinData) {
+                     setDropped({
+                            detay: [bulteinData],
+                     });
+              } else {
+                     setDropped({ detay: [] });
+              }
+       }, [bulteinData, setDropped]);
 
        return (
               <Paper
@@ -50,7 +68,8 @@ export default function SectionTwo({ newsItems, setStateCenterStream }) {
                             display: "flex",
                             flexDirection: "column",
                             height: "100%",
-                            mt:1,
+                            mt: 1,
+                            background:"#fff"
                      }}
               >
                      {/* Header */}
@@ -59,15 +78,18 @@ export default function SectionTwo({ newsItems, setStateCenterStream }) {
                                    display: "flex",
                                    alignItems: "center",
                                    justifyContent: "space-between",
-                                   bgcolor: "#868686",
+                                   bgcolor: "#ffa000",
                                    color: "primary.contrastText",
                                    px: 2,
                                    py: 1,
                             }}
                      >
-                            <Typography variant="subtitle1" fontWeight="bold">
-                                   Merkez Akışı
-                            </Typography>
+                            <Box display="flex" alignItems="center" gap={1}>
+                                   <FolderOpenIcon fontSize="small" />
+                                   <Typography variant="subtitle1" fontWeight="bold">
+                                          Merkez Akışı
+                                   </Typography>
+                            </Box>
                             <Box>
                                    <Tooltip title="Kaydet">
                                           <span>
@@ -98,23 +120,19 @@ export default function SectionTwo({ newsItems, setStateCenterStream }) {
 
                      {/* İçerik */}
                      <Divider />
-
                      <TableContainer
                             component={Box}
                             sx={{
                                    flexGrow: 1,
-                                   bgcolor: "#fafafa",
+                                   bgcolor: "#fff",
                             }}
                      >
                             <DropZone
                                    id="detay"
-                                   newsItems={newsItems}
                                    title="Detay fotoğrafını sürükle bırak"
-                                   fieldName="image2Source"
                                    onChange={(items) => setDroppedFiles(items)}
                             />
                      </TableContainer>
               </Paper>
        );
 }
-

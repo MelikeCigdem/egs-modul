@@ -56,10 +56,11 @@ const tabIcons = [
 ];
 
 
-export default function SectionOne({ tabValue, setTabValue, newsItems, handleSelectNews, setStateCenterStream }) {
-       const [selectedIndex, setSelectedIndex] = useState(1);
+export default function SectionOne({ tabValue, setTabValue, newsItems, handleSelectNews, setStateCenterStream, setbulletinID }) {
+       const [selectedIndex, setSelectedIndex] = useState(0);
+       const [startDate, setStartDate] = useState(null);
+       const [endDate, setEndDate] = useState(null);
 
-     
        const handleChange = (event, newValue) => {
               setTabValue(newValue)
        }
@@ -81,7 +82,7 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
                             <Tab
                                    key={index}
                                    sx={{
-                                          px: 2,
+                                          px: 3,
                                           minHeight: 40,
                                           height: 40,
                                           borderRight: index !== tabIcons.length - 1 ? "1px solid #dae1e9" : "none",
@@ -106,22 +107,27 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
        );
 
        const handleListItemClick = (event, index, item) => {
-              console.log("index",index);
+              console.log("index", index);
               // aktif olan bülten satırını belirtmek için
               setSelectedIndex(index);
               // Merkez akış kolonunu açmak için 
               setStateCenterStream(true)
+              // Bülten id sini alıyorum burada sonra bunu merkez akışına ileteceğim.
+              setbulletinID(index);
        };
-
-    
+ 
        return (
               <Box>
                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1, gap: 2 }}>
-                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>{renderTabs()}</Box>
+                            <Box sx={{ borderBottom: 1, borderColor: 'divider', width: "100%" }}>{renderTabs()}</Box>
+                         
                      </Box>
                      {/* Haberlerim */}
-                     <CustomTabPanel value={tabValue} index={0}>
-                            <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
+                     <CustomTabPanel value={tabValue} index={0} >
+                            <TableContainer component={Paper} className="deneme" sx={{
+                                   overflowY: "auto",
+                                   height: "calc(100vh - 150px)",
+                            }}>
                                    <Table size="small">
                                           <TableBody>
                                                  {newsItems.map((item) => (

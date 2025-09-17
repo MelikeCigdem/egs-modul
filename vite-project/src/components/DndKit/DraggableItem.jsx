@@ -16,7 +16,7 @@ export default function DraggableItem({ item, children, onClick }) {
     transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
     transition,
     opacity: isDragging ? 0.6 : 1,
-    cursor: "pointer"
+    cursor: "pointer",
   };
 
 

@@ -5,8 +5,10 @@ import {
   useSensors,
   PointerSensor,
   KeyboardSensor,
-  closestCenter
+  closestCenter,
+  DragOverlay,
 } from "@dnd-kit/core";
+import { Typography } from "@mui/material";
 
 const DndKitContext = createContext();
 export const useDndKit = () => useContext(DndKitContext);
@@ -89,7 +91,24 @@ export default function DndKitProvider({ children }) {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <DndKitContext.Provider value={value}>{children}</DndKitContext.Provider>
+      <DndKitContext.Provider value={value}>
+        {children}
+        <DragOverlay>
+          {activeItem ? (
+            <div style = {{
+              background:"white",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+              padding: "8px",
+              borderRadius: 4,
+            }}> 
+              <Typography fontSize={14} fontWeight="bold">{activeItem.title}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                {new Date(activeItem.publishDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {activeItem.city}
+              </Typography>
+            </div>
+          ) : null}
+        </DragOverlay>
+      </DndKitContext.Provider>
     </DndContext>
   );
 }

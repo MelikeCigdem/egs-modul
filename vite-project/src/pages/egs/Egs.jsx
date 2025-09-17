@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
        Box,
        Grid,
@@ -8,15 +8,6 @@ import {
        MenuItem,
        Button,
        Typography,
-       Table,
-       Dialog,
-       DialogActions,
-       DialogContent,
-       DialogTitle,
-       TableHead,
-       TableBody,
-       TableRow,
-       TableCell,
        Stack,
        FormControl,
        InputLabel,
@@ -31,17 +22,20 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from './Egs.module.scss';
 import { useForm, Controller } from "react-hook-form";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import SectionOne from "../home/SectionOne/SectionOne";
 import SectionTwo from "../home/SectionTwo/SectionTwo";
+import Subtitle from "../../components/Subtitle";
 
 function Egs() {
        const [tabValue, setTabValue] = useState(0);
-       const [rows, setRows] = useState([]);
-       const [open, setOpen] = useState(false);
        const [stateCenterStream, setStateCenterStream] = useState(false)
+       // seçilen bülten id si 
+       const [bulletinID, setbulletinID] = useState(null);
+       // const [selectedDate, setSelectedDate] = useState(null);
+
+       // altyazı tablosu referansı
+       const subtitleRef = useRef();
+
        const { control, handleSubmit, watch, reset } = useForm({
               defaultValues: {
                      title: "",
@@ -57,30 +51,6 @@ function Egs() {
               console.log(data);
        };
 
-       const [formData, setFormData] = useState({
-              col1: "",
-              col2: "",
-              desc: "",
-              info: null,
-       });
-
-       const handleOpen = () => setOpen(true);
-       const handleClose = () => {
-              setOpen(false);
-              setFormData({ col1: "", col2: "", desc: "", info: null });
-       };
-
-       const handleChange = (e) => {
-              setFormData({
-                     ...formData,
-                     [e.target.name]: e.target.value,
-              });
-       };
-
-       const handleAddRow = () => {
-              setRows([...rows, formData]);
-              handleClose();
-       };
        // Habere tıklandığında formu dolduracak fonksiyon
        const handleSelectNews = (news) => {
               reset({
@@ -107,16 +77,23 @@ function Egs() {
        const centerStream = () => {
               setStateCenterStream(true);
        }
+            // Filtrelenmiş data
+       // const filteredNews = newsItems.filter((item) => {
+       //        if (!selectedDate) return true; // tarih seçilmemişse
+       //        const itemDate = dayjs(item.publishDate);
+       //        return itemDate.isSame(selectedDate, "day");
+       // });
+
 
        return (
               <Grid container sx={{ height: "100vh", width: '100%' }}>
                      {/* Sol taraf */}
                      <Grid item size={3} sx={{ borderRight: "1px solid #ddd", height: "100%" }}>
-                            <SectionOne tabValue={tabValue} setTabValue={setTabValue} newsItems={newsItems} handleSelectNews={handleSelectNews} setStateCenterStream={setStateCenterStream}/>
+                            <SectionOne tabValue={tabValue} setTabValue={setTabValue} newsItems={newsItems} handleSelectNews={handleSelectNews} setStateCenterStream={setStateCenterStream} setbulletinID={setbulletinID} />
                      </Grid>
                      {stateCenterStream &&
-                            <Grid item size={2} sx={{borderRadius:"unset"}}>
-                                   <SectionTwo newsItems={newsItems} setStateCenterStream={setStateCenterStream} />
+                            <Grid item size={2} sx={{ borderRadius: "unset" }}>
+                                   <SectionTwo newsItems={newsItems} setStateCenterStream={setStateCenterStream} bulletinID={bulletinID} />
                             </Grid>
                      }
 
@@ -133,6 +110,27 @@ function Egs() {
                                    }}
                             >
                                    <Stack direction="row" spacing={0.5} sx={{ width: "100%" }}>
+                                          <Button
+                                                 startIcon={<FolderOpenIcon />}
+                                                 sx={{
+                                                        flex: 1,
+                                                        bgcolor: "#ffb300",
+                                                        color: "#fff",
+                                                        fontWeight: 400,
+                                                        textTransform: "none",
+                                                        borderRadius: 1,
+                                                        padding: 0.5,
+                                                        "&:hover": {
+                                                               bgcolor: "#ffa000",
+                                                               boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
+                                                        },
+                                                        display: stateCenterStream && "none"
+
+                                                 }}
+                                                 onClick={centerStream}
+                                          >
+                                                 Merkez Akış
+                                          </Button>
                                           <Button
                                                  startIcon={<AddIcon />}
                                                  sx={{
@@ -152,27 +150,6 @@ function Egs() {
                                           >
                                                  Yeni Haber
                                           </Button>
-
-                                          <Button
-                                                 startIcon={<FolderOpenIcon />}
-                                                 sx={{
-                                                        flex: 1,
-                                                        bgcolor: "#ffb300",
-                                                        color: "#fff",
-                                                        fontWeight: 400,
-                                                        textTransform: "none",
-                                                        borderRadius: 1,
-                                                        padding: 0.5,
-                                                        "&:hover": {
-                                                               bgcolor: "#ffa000",
-                                                               boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-                                                        },
-                                                 }}
-                                                 onClick={centerStream}
-                                          >
-                                                 Merkez Akış
-                                          </Button>
-
                                           <Button
                                                  startIcon={<FlowIcon />}
                                                  sx={{
@@ -191,7 +168,6 @@ function Egs() {
                                           >
                                                  Bülten
                                           </Button>
-
                                           <Button
                                                  startIcon={<FileCopyIcon />}
                                                  sx={{
@@ -210,7 +186,6 @@ function Egs() {
                                           >
                                                  Versiyon Oluştur
                                           </Button>
-
                                           <Button
                                                  type="submit"
                                                  form="egsForm"
@@ -231,6 +206,7 @@ function Egs() {
                                           >
                                                  Kaydet
                                           </Button>
+                                          
                                    </Stack>
                             </Box>
                             <Card sx={{ height: "100%", borderRadius: 0, display: "flex", flexDirection: "column" }}>
@@ -354,103 +330,13 @@ function Egs() {
                                    <CardActions sx={{ borderTop: "1px solid #ddd", flexDirection: "column", flexGrow: 1, overflow: "hidden" }}>
                                           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", p: 1, bgcolor: "grey.100", borderBottom: "1px solid #ddd" }}>
                                                  <Typography sx={{ pl: "6px" }} variant="body2" fontWeight="bold">Altyazı Tablosu</Typography>
-                                                 <Button variant="contained" size="small" onClick={handleOpen}>
+                                                 <Button variant="contained" size="small" onClick={() => subtitleRef.current?.handleOpenAdd()}>
                                                         + Satır Ekle
                                                  </Button>
                                           </Box>
 
-                                          <Box sx={{ flexGrow: 1, overflow: "auto", width: "100%" }}>
-                                                 <Table size="small">
-                                                        <TableHead>
-                                                               <TableRow>
-                                                                      <TableCell width="25%">
-                                                                             <Typography variant="body2" fontWeight="bold">
-                                                                                    KJ 1. satır
-                                                                             </Typography>
-                                                                      </TableCell>
-                                                                      <TableCell width="25%">
-                                                                             <Typography variant="body2" fontWeight="bold">
-                                                                                    KJ 2. satır
-                                                                             </Typography>
-                                                                      </TableCell>
-                                                                      <TableCell width="30%"><Typography variant="body2" fontWeight="bold">
-                                                                             Açıklama
-                                                                      </Typography></TableCell>
-                                                                      <TableCell width="20%"><Typography variant="body2" fontWeight="bold">
-                                                                             Süre/Bilgi
-                                                                      </Typography></TableCell>
-                                                               </TableRow>
-                                                        </TableHead>
-                                                        <TableBody>
-                                                               {rows.map((row, index) => (
-                                                                      <TableRow key={index}>
-                                                                             <TableCell>{row.col1}</TableCell>
-                                                                             <TableCell>{row.col2}</TableCell>
-                                                                             <TableCell>{row.desc}</TableCell>
-                                                                             <TableCell>{row.info ? row.info.format("HH:mm") : ""}</TableCell>
-                                                                      </TableRow>
-                                                               ))}
-                                                        </TableBody>
-                                                 </Table>
-                                          </Box>
-                                          <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-                                                 <DialogTitle sx={{ fontWeight: 600, pb: 1 }}>
-                                                        Yeni Satır Ekle
-                                                 </DialogTitle>
-
-                                                 <DialogContent dividers sx={{ p: 3 }}>
-                                                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                                                               <TextField
-                                                                      label="KJ 1. satır"
-                                                                      name="col1"
-                                                                      value={formData.col1}
-                                                                      onChange={handleChange}
-                                                                      fullWidth
-                                                               />
-
-                                                               <TextField
-                                                                      label="KJ 2. satır"
-                                                                      name="col2"
-                                                                      value={formData.col2}
-                                                                      onChange={handleChange}
-                                                                      fullWidth
-                                                               />
-
-                                                               <TextField
-                                                                      label="Açıklama"
-                                                                      name="desc"
-                                                                      value={formData.desc}
-                                                                      onChange={handleChange}
-                                                                      fullWidth
-                                                                      multiline
-                                                                      rows={3}
-                                                               />
-
-                                                               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                      <TimePicker
-                                                                             label="Süre"
-                                                                             value={formData.info}
-                                                                             onChange={(newValue) =>
-                                                                                    setFormData((prev) => ({ ...prev, info: newValue }))
-                                                                             }
-                                                                             slotProps={{
-                                                                                    textField: { fullWidth: true },
-                                                                             }}
-                                                                      />
-                                                               </LocalizationProvider>
-                                                        </Box>
-                                                 </DialogContent>
-
-                                                 <DialogActions sx={{ px: 3, pb: 2 }}>
-                                                        <Button onClick={handleClose} color="inherit">
-                                                               İptal
-                                                        </Button>
-                                                        <Button onClick={handleAddRow} variant="contained">
-                                                               Kaydet
-                                                        </Button>
-                                                 </DialogActions>
-                                          </Dialog>
-
+                                          {/* altyazı tablosu */}
+                                          <Subtitle ref={subtitleRef} />
                                    </CardActions>
                             </Card>
                      </Grid>
@@ -482,6 +368,168 @@ export const newsItems = [
        },
        {
               pk_NewsId: 2,
+              title: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              description: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              subtitleText: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              mainText: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              city: "Denizli",
+              publishDate: "2025-09-15T11:33:07"
+       },
+       {
+              pk_NewsId: 3,
+              title: "Kayserispor 3. beraberliğini aldı",
+              description: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              subtitleText: "Kayserispor 3. beraberliğini aldı",
+              mainText: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              city: "Kayseri",
+              publishDate: "2025-09-15T11:34:34"
+       },
+       {
+              pk_NewsId: 4,
+              title: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              description: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              subtitleText: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              mainText: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              city: "Antalya",
+              publishDate: "2025-09-15T11:33:23"
+       },
+       {
+              pk_NewsId: 5,
+              title: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              description: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              subtitleText: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              mainText: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              city: "Denizli",
+              publishDate: "2025-09-15T11:33:07"
+       },
+       {
+              pk_NewsId: 6,
+              title: "Kayserispor 3. beraberliğini aldı",
+              description: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              subtitleText: "Kayserispor 3. beraberliğini aldı",
+              mainText: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              city: "Kayseri",
+              publishDate: "2025-09-15T11:34:34"
+       },
+       {
+              pk_NewsId: 7,
+              title: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              description: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              subtitleText: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              mainText: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              city: "Antalya",
+              publishDate: "2025-09-15T11:33:23"
+       },
+       {
+              pk_NewsId: 8,
+              title: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              description: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              subtitleText: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              mainText: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              city: "Denizli",
+              publishDate: "2025-09-15T11:33:07"
+       },
+       {
+              pk_NewsId: 9,
+              title: "Kayserispor 3. beraberliğini aldı",
+              description: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              subtitleText: "Kayserispor 3. beraberliğini aldı",
+              mainText: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              city: "Kayseri",
+              publishDate: "2025-09-15T11:34:34"
+       },
+       {
+              pk_NewsId: 10,
+              title: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              description: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              subtitleText: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              mainText: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              city: "Antalya",
+              publishDate: "2025-09-15T11:33:23"
+       },
+       {
+              pk_NewsId: 11,
+              title: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              description: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              subtitleText: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              mainText: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              city: "Denizli",
+              publishDate: "2025-09-15T11:33:07"
+       },
+       {
+              pk_NewsId: 12,
+              title: "Kayserispor 3. beraberliğini aldı",
+              description: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              subtitleText: "Kayserispor 3. beraberliğini aldı",
+              mainText: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              city: "Kayseri",
+              publishDate: "2025-09-15T11:34:34"
+       },
+       {
+              pk_NewsId: 13,
+              title: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              description: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              subtitleText: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              mainText: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              city: "Antalya",
+              publishDate: "2025-09-15T11:33:23"
+       },
+       {
+              pk_NewsId: 14,
+              title: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              description: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              subtitleText: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              mainText: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              city: "Denizli",
+              publishDate: "2025-09-15T11:33:07"
+       },
+       {
+              pk_NewsId: 15,
+              title: "Kayserispor 3. beraberliğini aldı",
+              description: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              subtitleText: "Kayserispor 3. beraberliğini aldı",
+              mainText: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              city: "Kayseri",
+              publishDate: "2025-09-15T11:34:34"
+       },
+       {
+              pk_NewsId: 16,
+              title: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              description: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              subtitleText: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              mainText: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              city: "Antalya",
+              publishDate: "2025-09-15T11:33:23"
+       },
+       {
+              pk_NewsId: 17,
+              title: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              description: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              subtitleText: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
+              mainText: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
+              city: "Denizli",
+              publishDate: "2025-09-15T11:33:07"
+       },
+       {
+              pk_NewsId: 18,
+              title: "Kayserispor 3. beraberliğini aldı",
+              description: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              subtitleText: "Kayserispor 3. beraberliğini aldı",
+              mainText: "Kayserispor, Süper Lig'in 5. haftasında evinde Göztepe ile 1-1 berabere kalarak üçüncü beraberliğini aldı.",
+              city: "Kayseri",
+              publishDate: "2025-09-15T11:34:34"
+       },
+       {
+              pk_NewsId: 19,
+              title: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              description: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              subtitleText: "Alanya'da ASAT'ın yatırımları 6 yılda 2,7 milyar TL'yi aştı",
+              mainText: "Antalya Büyükşehir Belediyesi ASAT Genel Müdürlüğü'nün, 2019-2025 yılları arasında Alanya'da içme suyu, kanalizasyon ve arıtma tesislerinden hizmet altyapısına kadar geniş bir yelpazeyi kapsayan projelerin toplam bedeli 2 milyar 784 milyon TL'yi geçti.",
+              city: "Antalya",
+              publishDate: "2025-09-15T11:33:23"
+       },
+       {
+              pk_NewsId: 20,
               title: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",
               description: "Denizli'nin Acıpayam ilçesinde, cuma günü bir krom madeninde meydana gelen göçükten 25 saat sonra sağ olarak çıkartılan işçi, tedavi gördüğü hastanede hayatını kaybetti.",
               subtitleText: "Göçükten sağ olarak kurtarılıp alkışlarla karşılanan madenci, hayatını kaybetti",

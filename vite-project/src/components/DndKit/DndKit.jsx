@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
 
 export default function DropZone({ id, onChange }) {
+  
   const { isOver, setNodeRef } = useDroppable({ id });
   const { dropped, setDropped } = useDndKit();
 
