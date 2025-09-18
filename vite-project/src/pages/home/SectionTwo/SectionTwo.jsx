@@ -60,16 +60,15 @@ export default function SectionTwo({ newsItems, setStateCenterStream, bulletinID
        }, [bulteinData, setDropped]);
 
        return (
-              <Paper
+              <Box
                      elevation={3}
                      sx={{
-                            borderRadius: 2,
+                            borderRadius: 4,
                             overflow: "hidden",
                             display: "flex",
                             flexDirection: "column",
                             height: "100%",
-                            mt: 1,
-                            background:"#fff"
+                            mt: 2,
                      }}
               >
                      {/* Header */}
@@ -78,10 +77,13 @@ export default function SectionTwo({ newsItems, setStateCenterStream, bulletinID
                                    display: "flex",
                                    alignItems: "center",
                                    justifyContent: "space-between",
-                                   bgcolor: "#ffa000",
-                                   color: "primary.contrastText",
+                                   background: "linear-gradient(135deg, #2a2a72, #009ffd)",
+                                   color: "#fff",
                                    px: 2,
-                                   py: 1,
+                                   py: 2,
+                                   borderRadius: "16px 16px 0 0",
+                                   boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                                   mb: 2,
                             }}
                      >
                             <Box display="flex" alignItems="center" gap={1}>
@@ -119,12 +121,13 @@ export default function SectionTwo({ newsItems, setStateCenterStream, bulletinID
                      </Box>
 
                      {/* İçerik */}
-                     <Divider />
                      <TableContainer
                             component={Box}
                             sx={{
                                    flexGrow: 1,
                                    bgcolor: "#fff",
+                                   borderRadius: "0 0 16px 16px",
+                                   pt: 2,
                             }}
                      >
                             <DropZone
@@ -133,6 +136,7 @@ export default function SectionTwo({ newsItems, setStateCenterStream, bulletinID
                                    onChange={(items) => setDroppedFiles(items)}
                             />
                      </TableContainer>
-              </Paper>
+              </Box>
+
        );
 }

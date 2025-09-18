@@ -6,8 +6,16 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import TitleIcon from "@mui/icons-material/Title";
+import NotesIcon from "@mui/icons-material/Notes";
+import DescriptionIcon from "@mui/icons-material/Description";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import SaveIcon from "@mui/icons-material/Save";
+import CloseIcon from "@mui/icons-material/Close";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
 
 const Subtitle = forwardRef(({ initialRows = [] }, ref) => {
   const [rows, setRows] = useState(initialRows);
@@ -72,40 +80,182 @@ const Subtitle = forwardRef(({ initialRows = [] }, ref) => {
               <TableCell>{row.info ? row.info.format("HH:mm") : ""}</TableCell>
               <TableCell>
                 <IconButton size="small" >
-                  <EditIcon color="primary" fontSize="small" sx={{mr:1}} onClick={() => handleEditRow(index)}/>
-                  <DeleteIcon color="warning" fontSize="small" onClick={() => handleDeleteRow(index)}/>
+                  <EditIcon color="primary" fontSize="small" sx={{ mr: 1 }} onClick={() => handleEditRow(index)} />
+                  <DeleteIcon color="warning" fontSize="small" onClick={() => handleDeleteRow(index)} />
                 </IconButton>
               </TableCell>
-             
+
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle sx={{ fontWeight: 600, pb: 1 }}>
-          {editingIndex !== null ? "Satırı Düzenle" : "Yeni Satır Ekle"}
+        <DialogTitle
+          sx={{
+            fontWeight: 700,
+            pb: 1,
+            bgcolor: "#2b2b35", // biraz daha açık
+            color: "#f5f5f5",
+            borderBottom: "1px solid rgba(255,255,255,0.2)",
+          }}
+        >
+          {editingIndex !== null ? (
+            <>
+              <EditIcon fontSize="small" /> Satırı Düzenle
+            </>
+          ) : (
+            <>
+              <AddCircleOutlineIcon fontSize="small" /> Yeni Satır Ekle
+            </>
+          )}
         </DialogTitle>
 
-        <DialogContent dividers sx={{ p: 3 }}>
+        <DialogContent
+          dividers
+          sx={{
+            p: 3,
+            bgcolor: "#30303d", // daha açık ve soft
+            color: "#fff",
+          }}
+        >
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <TextField label="KJ 1. satır" name="col1" value={formData.col1} onChange={handleChange} fullWidth />
-            <TextField label="KJ 2. satır" name="col2" value={formData.col2} onChange={handleChange} fullWidth />
-            <TextField label="Açıklama" name="desc" value={formData.desc} onChange={handleChange} fullWidth multiline rows={3} />
+            <TextField
+              label="KJ 1. Satır"
+              name="col1"
+              value={formData.col1}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                  "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                  "&.Mui-focused fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                },
+                "& .MuiInputBase-label": { color: "#fff" },
+                "& .MuiInputBase-input": { color: "#fff" },
+                "& .MuiInputLabel-root": { color: "#fff", fontWeight: "600" },
+                bgcolor: "rgba(255,255,255,0.05)",
+                borderRadius: 2,
+              }}
+            />
+            <TextField
+              label="KJ 2. Satır"
+              name="col2"
+              value={formData.col2}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                  "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                  "&.Mui-focused fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                },
+                "& .MuiInputBase-input": { color: "#fff" },
+                "& .MuiInputLabel-root": { color: "#fff", fontWeight: "600" },
+                bgcolor: "rgba(255,255,255,0.05)",
+                borderRadius: 2,
+              }}
+            />
+            <TextField
+              label="Açıklama"
+              name="desc"
+              value={formData.desc}
+              onChange={handleChange}
+              fullWidth
+              multiline
+              rows={3}
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                  "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                  "&.Mui-focused fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                },
+                "& .MuiInputBase-input": { color: "#fff" },
+                "& .MuiInputLabel-root": { color: "#fff", fontWeight: "600" },
+                bgcolor: "rgba(255,255,255,0.05)",
+                borderRadius: 2,
+              }}
+            />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <TimePicker
                 label="Süre"
                 value={formData.info}
-                onChange={(newValue) => setFormData((prev) => ({ ...prev, info: newValue }))}
-                slotProps={{ textField: { fullWidth: true } }}
+                onChange={(newValue) =>
+                  setFormData((prev) => ({ ...prev, info: newValue }))
+                }
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    InputLabelProps: { shrink: true },
+                    sx: {
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+                        "&:hover fieldset": { borderColor: "rgba(255,255,255,0.5)" },
+                        "&.Mui-focused fieldset": { borderColor: "rgba(255,255,255,0.7)" },
+                      },
+                      "& input": { color: "#fff !important" }, 
+                      "& .MuiInputLabel-root": { color: "#fff", fontWeight: "600" },
+                      "& .MuiSvgIcon-root": { color: "#fff" }, // ikon
+                      bgcolor: "rgba(255,255,255,0.05)",
+                      borderRadius: 2,
+                    },
+                  },
+                }}
               />
             </LocalizationProvider>
+
+
           </Box>
         </DialogContent>
 
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setOpen(false)} color="inherit">İptal</Button>
-          <Button onClick={handleAddRow} variant="contained">Kaydet</Button>
+        <DialogActions
+          sx={{
+            px: 3,
+            pb: 2,
+            gap: 1,
+            borderTop: "1px solid rgba(255,255,255,0.1)",
+            bgcolor: "#2b2b35", // header ile uyumlu
+          }}
+        >
+          <Button
+            onClick={() => setOpen(false)}
+            color="inherit"
+            startIcon={<CloseIcon />}
+            sx={{
+              textTransform: "none",
+              borderRadius: 2,
+              pl: 4,
+              pr: 4,
+              color: "#fff",
+              bgcolor: "rgba(255,255,255,0.1)",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.2)" },
+            }}
+          >
+            İptal
+          </Button>
+          <Button
+            onClick={handleAddRow}
+            variant="contained"
+            startIcon={<SaveIcon />}
+            sx={{
+              textTransform: "none",
+              borderRadius: 2,
+              px: 3,
+              fontWeight: 600,
+              bgcolor: "#009ffd",
+              backgroundImage: "linear-gradient(135deg, #009ffd, #2a2a72)",
+              "&:hover": { opacity: 0.9 },
+            }}
+          >
+            Kaydet
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

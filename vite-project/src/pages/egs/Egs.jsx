@@ -11,6 +11,7 @@ import {
        Stack,
        FormControl,
        InputLabel,
+       Divider,
 } from "@mui/material";
 import Select from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
@@ -77,7 +78,7 @@ function Egs() {
        const centerStream = () => {
               setStateCenterStream(true);
        }
-            // Filtrelenmiş data
+       // Filtrelenmiş data
        // const filteredNews = newsItems.filter((item) => {
        //        if (!selectedDate) return true; // tarih seçilmemişse
        //        const itemDate = dayjs(item.publishDate);
@@ -86,9 +87,9 @@ function Egs() {
 
 
        return (
-              <Grid container sx={{ height: "100vh", width: '100%' }}>
+              <Grid container sx={{ width: '100%', }}>
                      {/* Sol taraf */}
-                     <Grid item size={3} sx={{ borderRight: "1px solid #ddd", height: "100%" }}>
+                     <Grid item size={3} sx={{ borderRight: "1px solid #ddd" }}>
                             <SectionOne tabValue={tabValue} setTabValue={setTabValue} newsItems={newsItems} handleSelectNews={handleSelectNews} setStateCenterStream={setStateCenterStream} setbulletinID={setbulletinID} />
                      </Grid>
                      {stateCenterStream &&
@@ -98,246 +99,223 @@ function Egs() {
                      }
 
                      {/* Sağ taraf */}
-                     <Grid item size={stateCenterStream === true ? 7 : 9} sx={{ height: "100%" }}>
+                     <Grid className="deneme" item  size={stateCenterStream === true ? 7 : 9}>
                             <Box
                                    sx={{
-                                          height: 60,
-                                          px: 1,
+                                          p: 2,
                                           display: "flex",
                                           alignItems: "center",
-                                          bgcolor: "#fff",
+                                          bgcolor: "#f5f7fe",
                                           boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
                                    }}
                             >
-                                   <Stack direction="row" spacing={0.5} sx={{ width: "100%" }}>
+                                   <Stack direction="row" spacing={2} sx={{ width: "100%", }}>
                                           <Button
-                                                 startIcon={<FolderOpenIcon />}
-                                                 sx={{
-                                                        flex: 1,
-                                                        bgcolor: "#ffb300",
-                                                        color: "#fff",
-                                                        fontWeight: 400,
-                                                        textTransform: "none",
-                                                        borderRadius: 1,
-                                                        padding: 0.5,
-                                                        "&:hover": {
-                                                               bgcolor: "#ffa000",
-                                                               boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-                                                        },
-                                                        display: stateCenterStream && "none"
-
-                                                 }}
+                                                 className={styles.centerStreamBtn}
+                                                 startIcon={
+                                                        <Box className={styles.iconWrapper}>
+                                                               <FolderOpenIcon />
+                                                        </Box>
+                                                 }
                                                  onClick={centerStream}
                                           >
                                                  Merkez Akış
                                           </Button>
                                           <Button
-                                                 startIcon={<AddIcon />}
-                                                 sx={{
-                                                        flex: 1,
-                                                        bgcolor: "#4caf50",
-                                                        color: "#fff",
-                                                        fontWeight: 400,
-                                                        textTransform: "none",
-                                                        borderRadius: 1,
-                                                        padding: 1,
-                                                        "&:hover": {
-                                                               bgcolor: "#43a047",
-                                                               boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-                                                        },
-                                                 }}
+                                                 className={styles.centerStreamBtn}
+                                                 startIcon={
+                                                        <Box className={styles.iconWrapper}>
+                                                               <AddIcon />
+                                                        </Box>
+                                                 }
                                                  onClick={newNews}
                                           >
                                                  Yeni Haber
                                           </Button>
                                           <Button
-                                                 startIcon={<FlowIcon />}
-                                                 sx={{
-                                                        flex: 1,
-                                                        bgcolor: "#e53935",
-                                                        color: "#fff",
-                                                        fontWeight: 400,
-                                                        textTransform: "none",
-                                                        borderRadius: 1,
-                                                        padding: 0.5,
-                                                        "&:hover": {
-                                                               bgcolor: "#d32f2f",
-                                                               boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-                                                        },
-                                                 }}
-                                          >
-                                                 Bülten
-                                          </Button>
-                                          <Button
-                                                 startIcon={<FileCopyIcon />}
-                                                 sx={{
-                                                        flex: 1,
-                                                        bgcolor: "#fb8c00",
-                                                        color: "#fff",
-                                                        fontWeight: 400,
-                                                        textTransform: "none",
-                                                        borderRadius: 1,
-                                                        padding: 0.5,
-                                                        "&:hover": {
-                                                               bgcolor: "#f57c00",
-                                                               boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-                                                        },
-                                                 }}
+                                                 className={styles.centerStreamBtn}
+                                                 startIcon={
+                                                        <Box className={styles.iconWrapper}>
+                                                               <FileCopyIcon />
+                                                        </Box>
+                                                 }
                                           >
                                                  Versiyon Oluştur
                                           </Button>
                                           <Button
+                                                 className={styles.centerStreamBtn}
+                                                 startIcon={
+                                                        <Box className={styles.iconWrapper}>
+                                                               <SaveIcon />
+                                                        </Box>
+                                                 }
                                                  type="submit"
                                                  form="egsForm"
-                                                 startIcon={<SaveIcon />}
-                                                 sx={{
-                                                        flex: 1,
-                                                        bgcolor: "#1976d2",
-                                                        color: "#fff",
-                                                        fontWeight: 400,
-                                                        textTransform: "none",
-                                                        borderRadius: 1,
-                                                        padding: 0.5,
-                                                        "&:hover": {
-                                                               bgcolor: "#1565c0",
-                                                               boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-                                                        },
-                                                 }}
                                           >
                                                  Kaydet
                                           </Button>
-                                          
                                    </Stack>
                             </Box>
-                            <Card sx={{ height: "100%", borderRadius: 0, display: "flex", flexDirection: "column" }}>
-                                   <form id="egsForm" onSubmit={handleSubmit(onSubmit)}>
-                                          {/* Üst Form Alanı */}
-                                          <Grid container spacing={1} sx={{ p: 1 }}>
-                                                 {/* Başlık */}
-                                                 <Grid size={3}>
-                                                        <Controller
-                                                               name="title"
-                                                               control={control}
-                                                               render={({ field }) => (
-                                                                      <TextField {...field} label="Başlık" size="small" variant="outlined" fullWidth />
-                                                               )}
-                                                        />
-                                                 </Grid>
-
-                                                 {/* Açıklama */}
-                                                 <Grid size={3}>
-                                                        <Controller
-                                                               name="description"
-                                                               control={control}
-                                                               render={({ field }) => (
-                                                                      <TextField {...field} label="Açıklama" size="small" variant="outlined" fullWidth />
-                                                               )}
-                                                        />
-                                                 </Grid>
-
-                                                 {/* Tarih */}
-                                                 <Grid size={3}>
-                                                        <Controller
-                                                               name="date"
-                                                               control={control}
-                                                               render={({ field }) => (
-                                                                      <DatePicker
-                                                                             wrapperClassName={styles.datePicker}
-                                                                             selected={field.value}
-                                                                             onChange={(date) => field.onChange(date)}
-                                                                             isClearable
-                                                                             placeholderText="Tarih Seçiniz"
-                                                                             dateFormat="dd/MM/yyyy"
-                                                                             className={styles.datePickerInput}
-                                                                             style={{ width: "100%" }}
+                            <Card sx={{ height: "100%", borderRadius: 0, display: "contents", flexDirection: "column" }}>
+                                   <Box sx={{
+                                          bgcolor: "#f5f7fe",
+                                          pr: 2, pl: 2,
+                                   }}>
+                                          <Box sx={{
+                                                 p: 2,
+                                                 bgcolor: "#fff",
+                                                 borderRadius: 4,
+                                          }}>
+                                                 <form id="egsForm" onSubmit={handleSubmit(onSubmit)}>
+                                                        {/* Üst Form Alanı */}
+                                                        <Grid container spacing={1} sx={{ p: 1 }}>
+                                                               {/* Başlık */}
+                                                               <Grid size={3}>
+                                                                      <Controller
+                                                                             name="title"
+                                                                             control={control}
+                                                                             render={({ field }) => (
+                                                                                    <TextField {...field} label="Başlık" size="small" variant="outlined" fullWidth />
+                                                                             )}
                                                                       />
-                                                               )}
-                                                        />
-                                                 </Grid>
+                                                               </Grid>
 
-                                                 {/* Bülten */}
-                                                 <Grid size={3}>
-                                                        <Controller
-                                                               name="newsletter"
-                                                               control={control}
-                                                               placeholder="Bülten Seçin"
-                                                               render={({ field }) => (
-                                                                      <FormControl fullWidth size="small">
-                                                                             <InputLabel id="newsletter-label">Bülten</InputLabel>
-                                                                             <Select
+                                                               {/* Açıklama */}
+                                                               <Grid size={3}>
+                                                                      <Controller
+                                                                             name="description"
+                                                                             control={control}
+                                                                             render={({ field }) => (
+                                                                                    <TextField {...field} label="Açıklama" size="small" variant="outlined" fullWidth />
+                                                                             )}
+                                                                      />
+                                                               </Grid>
+
+                                                               {/* Tarih */}
+                                                               <Grid size={3}>
+                                                                      <Controller
+                                                                             name="date"
+                                                                             control={control}
+                                                                             render={({ field }) => (
+                                                                                    <DatePicker
+                                                                                           wrapperClassName={styles.datePicker}
+                                                                                           selected={field.value}
+                                                                                           onChange={(date) => field.onChange(date)}
+                                                                                           isClearable
+                                                                                           placeholderText="Tarih Seçiniz"
+                                                                                           dateFormat="dd/MM/yyyy"
+                                                                                           className={styles.datePickerInput}
+                                                                                           style={{ width: "100%" }}
+                                                                                    />
+                                                                             )}
+                                                                      />
+                                                               </Grid>
+
+                                                               {/* Bülten */}
+                                                               <Grid size={3}>
+                                                                      <Controller
+                                                                             name="newsletter"
+                                                                             control={control}
+                                                                             placeholder="Bülten Seçin"
+                                                                             render={({ field }) => (
+                                                                                    <FormControl fullWidth size="small">
+                                                                                           <InputLabel id="newsletter-label">Bülten</InputLabel>
+                                                                                           <Select
+                                                                                                  {...field}
+                                                                                                  labelId="newsletter-label"
+                                                                                                  id="newsletter"
+                                                                                                  value={field.value || ""}
+                                                                                                  label="Bülten Seçin"
+                                                                                                  sx={{
+                                                                                                         "& .MuiSelect-select": {
+                                                                                                                display: "flex",
+                                                                                                                alignItems: "center",
+                                                                                                         },
+                                                                                                  }}
+                                                                                           >
+                                                                                                  <MenuItem value="">
+                                                                                                         <em>Bülten Seçin</em>
+                                                                                                  </MenuItem>
+                                                                                                  <MenuItem value="1">01-Mod</MenuItem>
+                                                                                                  <MenuItem value="3">---</MenuItem>
+                                                                                           </Select>
+                                                                                    </FormControl>
+                                                                             )}
+                                                                      />
+                                                               </Grid>
+                                                        </Grid>
+
+
+                                                        {/* Başlık Metni */}
+                                                        <Box sx={{ p: 1 }}>
+                                                               <Controller
+                                                                      name="subtitleText"
+                                                                      control={control}
+                                                                      render={({ field }) => (
+                                                                             <TextField
                                                                                     {...field}
-                                                                                    labelId="newsletter-label"
-                                                                                    id="newsletter"
-                                                                                    value={field.value || ""}
-                                                                                    label="Bülten Seçin"
-                                                                                    sx={{
-                                                                                           "& .MuiSelect-select": {
-                                                                                                  display: "flex",
-                                                                                                  alignItems: "center",
-                                                                                           },
-                                                                                    }}
-                                                                             >
-                                                                                    <MenuItem value="">
-                                                                                           <em>Bülten Seçin</em>
-                                                                                    </MenuItem>
-                                                                                    <MenuItem value="1">01-Mod</MenuItem>
-                                                                                    <MenuItem value="3">---</MenuItem>
-                                                                             </Select>
-                                                                      </FormControl>
-                                                               )}
-                                                        />
-                                                 </Grid>
-                                          </Grid>
-
-
-                                          {/* Başlık Metni */}
-                                          <Box sx={{ p: 1 }}>
-                                                 <Controller
-                                                        name="subtitleText"
-                                                        control={control}
-                                                        render={({ field }) => (
-                                                               <TextField
-                                                                      {...field}
-                                                                      label="Başlık Metni"
-                                                                      variant="outlined"
-                                                                      fullWidth
-                                                                      multiline
-                                                                      rows={9}
+                                                                                    label="Başlık Metni"
+                                                                                    variant="outlined"
+                                                                                    fullWidth
+                                                                                    multiline
+                                                                                    rows={9}
+                                                                             />
+                                                                      )}
                                                                />
-                                                        )}
-                                                 />
-                                          </Box>
+                                                        </Box>
 
-                                          {/* Ana Metin */}
-                                          <Box sx={{ flexGrow: 1, p: 1, overflow: "auto" }}>
-                                                 <Controller
-                                                        name="mainText"
-                                                        control={control}
-                                                        render={({ field }) => (
-                                                               <TextField
-                                                                      {...field}
-                                                                      label="Ana metninizi yazınız"
-                                                                      variant="outlined"
-                                                                      fullWidth
-                                                                      multiline
-                                                                      rows={16}
+                                                        {/* Ana Metin */}
+                                                        <Box sx={{ flexGrow: 1, p: 1, overflow: "auto" }}>
+                                                               <Controller
+                                                                      name="mainText"
+                                                                      control={control}
+                                                                      render={({ field }) => (
+                                                                             <TextField
+                                                                                    {...field}
+                                                                                    label="Ana metninizi yazınız"
+                                                                                    variant="outlined"
+                                                                                    fullWidth
+                                                                                    multiline
+                                                                                    rows={16}
+                                                                             />
+                                                                      )}
                                                                />
-                                                        )}
-                                                 />
-                                          </Box>
-                                   </form>
+                                                        </Box>
+                                                 </form>
 
-                                   <CardActions sx={{ borderTop: "1px solid #ddd", flexDirection: "column", flexGrow: 1, overflow: "hidden" }}>
-                                          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", p: 1, bgcolor: "grey.100", borderBottom: "1px solid #ddd" }}>
-                                                 <Typography sx={{ pl: "6px" }} variant="body2" fontWeight="bold">Altyazı Tablosu</Typography>
-                                                 <Button variant="contained" size="small" onClick={() => subtitleRef.current?.handleOpenAdd()}>
-                                                        + Satır Ekle
-                                                 </Button>
                                           </Box>
 
-                                          {/* altyazı tablosu */}
-                                          <Subtitle ref={subtitleRef} />
-                                   </CardActions>
+                                   </Box>
+
+                                   <Box sx={{
+                                          bgcolor: "#f5f7fe",
+                                          pr: 2, pl: 2,
+
+                                   }}>
+                                          <Box sx={{
+                                                 p: 2,
+                                                 bgcolor: "#fff",
+                                                 borderRadius: 4,
+                                                 borderTop: "6px solid #f5f7fe"
+                                          }}>
+                                                 <CardActions sx={{
+                                                        flexDirection: "column",
+                                                        p: 0
+                                                 }}>
+                                                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", p: 1, bgcolor: "grey.100", borderBottom: "1px solid #ddd" }}>
+                                                               <Typography sx={{ pl: "6px" }} variant="body2" fontWeight="bold">Altyazı Tablosu</Typography>
+                                                               <Button variant="contained" size="small" onClick={() => subtitleRef.current?.handleOpenAdd()}>
+                                                                      + Satır Ekle
+                                                               </Button>
+                                                        </Box>
+
+                                                        {/* altyazı tablosu */}
+                                                        <Subtitle ref={subtitleRef} />
+                                                 </CardActions>
+                                          </Box>
+
+                                   </Box>
+
                             </Card>
                      </Grid>
               </Grid>

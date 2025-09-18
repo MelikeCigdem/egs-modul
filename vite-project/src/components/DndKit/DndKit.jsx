@@ -26,7 +26,7 @@ export default function DropZone({ id, onChange }) {
   };
 
   return (
-    <Box ref={setNodeRef} sx={{ backgroundColor: isOver ? "#f0f0f0" : "#fafafa" }}>
+    <Box ref={setNodeRef} sx={{ backgroundColor: isOver ? "#fafafa" : "#fff" }}>
       <Table>
         <TableBody>
           {zoneItems.map(item => (

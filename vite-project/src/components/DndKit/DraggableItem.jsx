@@ -33,7 +33,7 @@ export default function DraggableItem({ item, children, onClick }) {
       <TableCell align="right" width={50}>
         <span
           className="drag-handle"
-          style={{ cursor: "grab" }}
+          style={{ cursor: "grab", color:"red", fontWeight:700 }}
           {...listeners}
         >
           ☰

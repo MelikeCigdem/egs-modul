@@ -25,17 +25,17 @@ import {
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-
 import DraggableItem from '../../../components/DndKit/DraggableItem';
+import styles from '../../egs/Egs.module.scss';
 
-
-function CustomTabPanel({ children, value, index }) {
+function CustomTabPanel({ children, value, index, className }) {
        return (
               <div
                      role="tabpanel"
                      hidden={value !== index}
                      id={`simple-tabpanel-${index}`}
                      aria-labelledby={`simple-tab-${index}`}
+                     className={className}
               >
                      {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
               </div>
@@ -49,10 +49,10 @@ CustomTabPanel.propTypes = {
 };
 
 const tabIcons = [
-       { icon: <PersonIcon fontSize="small" />, title: 'Haberlerim', },
-       { icon: <PodcastsIcon fontSize="small" />, title: 'Havuz' },
-       { icon: <AccessAlarmSharpIcon fontSize="small" />, title: 'Bülten' },
-       { icon: <ExitToAppIcon fontSize="small" />, title: 'Ajans' },
+  { icon: <PersonIcon sx={{ color: "#fff" }} fontSize="small" />, title: 'Haberlerim' },
+  { icon: <PodcastsIcon sx={{ color: "#fff" }} fontSize="small" />, title: 'Havuz' },
+  { icon: <AccessAlarmSharpIcon sx={{ color: "#fff" }} fontSize="small" />, title: 'Bülten' },
+  { icon: <ExitToAppIcon sx={{ color: "#fff" }} fontSize="small" />, title: 'Ajans' },
 ];
 
 
@@ -70,29 +70,23 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
                      value={tabValue}
                      onChange={handleChange}
                      aria-label="tabs"
-                     sx={{
-                            border: "1px solid #dae1e9",
-                            background: "#fff",
-                            borderRadius: "4px",
-                            minHeight: 40,
-                            height: 40,
-                     }}
+                     className={styles.customTabs}
+                      sx={{
+    '& .MuiTabs-indicator': {
+      backgroundColor: '#fff', // seçili tab alt çizgisi beyaz
+      height: 3,               // kalınlık
+      borderRadius: 3,         // köşeler
+    },
+  }}
               >
                      {tabIcons.map((tab, index) => (
                             <Tab
                                    key={index}
-                                   sx={{
-                                          px: 3,
-                                          minHeight: 40,
-                                          height: 40,
-                                          borderRight: index !== tabIcons.length - 1 ? "1px solid #dae1e9" : "none",
-                                          textTransform: "none",
-                                   }}
                                    icon={
                                           <Tooltip title={tab.title} arrow>
                                                  <Box display="flex" alignItems="center" gap={1}>
                                                         {tab.icon}
-                                                        <Typography fontSize={14}>{tab.title}</Typography>
+                                                        <Typography fontSize={14} sx={{ color: "#fff" }}>{tab.title}</Typography>
                                                  </Box>
                                           </Tooltip>
                                    }
@@ -115,15 +109,14 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
               // Bülten id sini alıyorum burada sonra bunu merkez akışına ileteceğim.
               setbulletinID(index);
        };
- 
+
        return (
               <Box>
-                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1, gap: 2 }}>
-                            <Box sx={{ borderBottom: 1, borderColor: 'divider', width: "100%" }}>{renderTabs()}</Box>
-                         
+                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 2, pr: 2, pl: 2, pb: "unset", gap: 2 }}>
+                            <Box sx={{ borderColor: 'divider', width: "100%" }}>{renderTabs()}</Box>
                      </Box>
                      {/* Haberlerim */}
-                     <CustomTabPanel value={tabValue} index={0} >
+                     <CustomTabPanel className={styles.customPanel} value={tabValue} index={0}>
                             <TableContainer component={Paper} className="deneme" sx={{
                                    overflowY: "auto",
                                    height: "calc(100vh - 150px)",
@@ -141,8 +134,11 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
 
                                                                {/* Drag handle sadece buraya */}
                                                                <TableCell align="right" width={50}>
-                                                                      <span className="drag-handle" style={{ cursor: "grab" }}>☰</span>
+                                                                      <Typography component="span" className={styles.dragHandle}>
+                                                                             ☰
+                                                                      </Typography>
                                                                </TableCell>
+
                                                         </DraggableItem>
                                                  ))}
                                           </TableBody>
@@ -151,7 +147,7 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
                             </TableContainer>
                      </CustomTabPanel>
                      {/* Havuz */}
-                     <CustomTabPanel value={tabValue} index={1}>
+                     <CustomTabPanel className={styles.customPanel} value={tabValue} index={1}>
                             <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
                                    <Table size="small">
                                           <TableBody>
@@ -171,12 +167,11 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
                                                         </DraggableItem>
                                                  ))}
                                           </TableBody>
-
                                    </Table>
                             </TableContainer>
                      </CustomTabPanel>
                      {/* Bülten */}
-                     <CustomTabPanel value={tabValue} index={2}>
+                     <CustomTabPanel className={styles.customPanel} value={tabValue} index={2}>
                             <Card sx={{ width: '100%', borderRadius: 0, boxShadow: 2, p: 0 }}>
                                    <CardContent sx={{ p: 0 }}>
                                           <List sx={{ p: 0 }}>
@@ -216,7 +211,7 @@ export default function SectionOne({ tabValue, setTabValue, newsItems, handleSel
                      </CustomTabPanel>
 
                      {/* Ajans */}
-                     <CustomTabPanel value={tabValue} index={3}>
+                     <CustomTabPanel className={styles.customPanel} value={tabValue} index={3}>
                             <div>Ajans</div>
                      </CustomTabPanel>
               </Box>
