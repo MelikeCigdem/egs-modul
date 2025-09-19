@@ -99,7 +99,7 @@ function Egs() {
                      }
 
                      {/* Sağ taraf */}
-                     <Grid className="deneme" item  size={stateCenterStream === true ? 7 : 9}>
+                     <Grid className="deneme" item size={stateCenterStream === true ? 7 : 9}>
                             <Box
                                    sx={{
                                           p: 2,
@@ -304,7 +304,15 @@ function Egs() {
                                                  }}>
                                                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", p: 1, bgcolor: "grey.100", borderBottom: "1px solid #ddd" }}>
                                                                <Typography sx={{ pl: "6px" }} variant="body2" fontWeight="bold">Altyazı Tablosu</Typography>
-                                                               <Button variant="contained" size="small" onClick={() => subtitleRef.current?.handleOpenAdd()}>
+                                                               <Button variant="contained" size="small" sx={{
+                                                                      textTransform: "none",
+                                                                      borderRadius: 2,
+                                                                      px: 3,
+                                                                      fontWeight: 600,
+                                                                      bgcolor: "#009ffd",
+                                                                      backgroundImage: "linear-gradient(135deg, #009ffd, #2a2a72)",
+                                                                      "&:hover": { opacity: 0.9 },
+                                                               }} onClick={() => subtitleRef.current?.handleOpenAdd()}>
                                                                       + Satır Ekle
                                                                </Button>
                                                         </Box>

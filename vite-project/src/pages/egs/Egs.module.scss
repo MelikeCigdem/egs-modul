@@ -182,11 +182,13 @@
 .customPanel {
        padding: 9px !important;
 }
+
 .dragHandle {
        cursor: grab;
        color: #1876d2 !important;
        font-weight: 700 !important;
 }
+
 // .centerStreamBtn {
 //        flex: 1;
 //        background-color: #fff !important;
@@ -310,45 +312,53 @@
 //   }
 // }
 .centerStreamBtn {
-  flex: 1;
-  background: linear-gradient(135deg, #3c3c3c, #5a5a5a); // daha açık tonlu gradient
-  color: #fff !important;
-  font-weight: 700 !important;
-  text-transform: none;
-  border-radius: 16px !important;
-  padding: 8px;
-  font-size: 16px;
-  transition: all 0.4s ease;
+       flex: 1;
+       //   background: linear-gradient(135deg, #3c3c3c, #5a5a5a); 
+       // background: linear-gradient(135deg, #2c2c2c, #6d6d6d);
+       // background: linear-gradient(135deg, #1f1f1f, #4a4a4a, #7a7a7a);
 
-  .iconWrapper {
-    background-color: #4a4a4a; // icon arka planını da gradient ile uyumlu açık ton yapıyoruz
-    border-radius: 50%;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.4s ease;
+       background: linear-gradient(135deg, #0f0f0f, #5e5e5e);
 
-    svg {
-      color: #fff;
-      transition: color 0.4s ease;
-      padding-right: 4px;
-      font-weight: 700;
-    }
-  }
 
-  &:hover {
-    background: linear-gradient(135deg, #5a5a5a, #3c3c3c); // hover’da gradient ters yönde
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 
-    .iconWrapper {
-      background-color: rgba(255, 255, 255, 0.1);
-      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-      transform: scale(0.9);
-    }
-  }
+       color: #fff !important;
+       font-weight: 700 !important;
+       text-transform: none;
+       border-radius: 16px !important;
+       padding: 8px;
+       font-size: 16px;
+       transition: all 0.4s ease;
+
+       .iconWrapper {
+              background-color: #4a4a4a;
+              border-radius: 50%;
+              padding: 14px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: all 0.4s ease;
+
+              svg {
+                     color: #fff;
+                     transition: color 0.4s ease;
+                     padding-right: 4px;
+                     font-weight: 700;
+              }
+       }
+
+       &:hover {
+              background: linear-gradient(135deg, #0f0f0f, #5e5e5e);
+              color: #fff;
+              box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+
+              .iconWrapper {
+                     background-color: rgba(255, 255, 255, 0.1);
+                     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                     transform: scale(0.9);
+              }
+       }
 }
+
 // .customTabs {
 //   border-radius: 12px;
 //   background: #e0e0e0;
@@ -416,59 +426,59 @@
 // }
 button:focus,
 button:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
+       outline: none !important;
+       box-shadow: none !important;
 }
+
 .customTabs {
-  border-radius: 12px;
-  background: #3c3c3c;
-  padding: 4px;
+       border-radius: 12px;
+       background: #3c3c3c;
+       padding: 4px;
 
-  .MuiTabs-flexContainer {
-    gap: 6px;
-  }
+       .MuiTabs-flexContainer {
+              gap: 6px;
+       }
 
-  .MuiTab-root {
-    text-transform: none;
-    min-height: 40px;
-    height: 40px;
-    padding: 0 18px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    color: #fff !important;
-    background: linear-gradient(135deg, #505050, #6b6b6b);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+       .MuiTab-root {
+              text-transform: none;
+              min-height: 40px;
+              height: 40px;
+              padding: 0 18px;
+              border-radius: 10px;
+              transition: all 0.3s ease;
+              font-weight: 500;
+              color: #fff !important;
+              background: linear-gradient(135deg, #505050, #6b6b6b);
+              display: flex;
+              align-items: center;
+              justify-content: center;
 
-    &:hover {
-      background: linear-gradient(135deg, #606060, #7a7a7a);
-      color: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    }
+              &:hover {
+                     background: linear-gradient(135deg, #606060, #7a7a7a);
+                     color: #fff;
+                     transform: translateY(-2px);
+                     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+              }
 
-    &:focus,
-    &:focus-visible {
-      outline: none !important;
-      box-shadow: none !important;
-    }
+              &:focus,
+              &:focus-visible {
+                     outline: none !important;
+                     box-shadow: none !important;
+              }
 
-    &::before {
-      content: none !important;
-    }
+              &::before {
+                     content: none !important;
+              }
 
-    .MuiTab-iconWrapper {
-      margin-right: 8px;
-      display: flex;
-      align-items: center;
+              .MuiTab-iconWrapper {
+                     margin-right: 8px;
+                     display: flex;
+                     align-items: center;
 
-      svg {
-        color: #ffffff;
-        transition: transform 0.3s ease;
-      }
-    }
-  }
+                     svg {
+                            color: #ffffff;
+                            transition: transform 0.3s ease;
+                     }
+              }
+       }
 }
-
